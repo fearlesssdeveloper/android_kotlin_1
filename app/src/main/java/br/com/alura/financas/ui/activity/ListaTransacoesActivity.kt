@@ -19,7 +19,6 @@ class ListaTransacoesActivity : AppCompatActivity(){
             Transacao(BigDecimal(20.5), "Comida", Calendar.getInstance()),
             Transacao(BigDecimal(100.0), "Econômia", Calendar.getInstance())
         )
-        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, transacoes)
         lista_transacoes_listview.adapter = ListaTransacoesAdapter(transacoes, this)
     }
 }

@@ -29,7 +29,11 @@ class ListaTransacoesAdapter(
     override fun getView(posicao: Int, view: View?, parent: ViewGroup?): View {
         val viewCriada = LayoutInflater.from(context).inflate(R.layout.transacao_item, parent, false)
         val transacao = transacoes[posicao]
-        viewCriada.transacao_valor.text = transacao.getValor().toString()
+
+        viewCriada.transacao_valor.text = transacao.valor.toString()
+        viewCriada.transacao_categoria.text = transacao.categoria.toString()
+        viewCriada.transacao_data.text = transacao.data.toString()
+
         return viewCriada
     }
 }
