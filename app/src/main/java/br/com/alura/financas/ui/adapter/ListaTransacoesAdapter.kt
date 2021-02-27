@@ -45,12 +45,10 @@ class ListaTransacoesAdapter(
             viewCriada.transacao_icone.setBackgroundResource(R.drawable.icone_transacao_item_despesa)
         }
 
-        viewCriada.transacao_valor.text = transacao.valor.toString()
+        viewCriada.transacao_valor.text = transacao.valor.formataParaBrasileiro()
         viewCriada.transacao_categoria.text = transacao.categoria.toString()
         viewCriada.transacao_data.text = transacao.data.formataParaBrasileiro()
 
         return viewCriada
     }
-
-
 }
