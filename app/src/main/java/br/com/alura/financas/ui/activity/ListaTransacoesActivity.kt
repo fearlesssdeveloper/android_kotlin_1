@@ -1,14 +1,14 @@
 package br.com.alura.financas.ui.activity
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.financas.R
-import br.com.alura.financas.extension.formataParaBrasileiro
 import br.com.alura.financas.model.Tipo
 import br.com.alura.financas.model.Transacao
+import br.com.alura.financas.ui.ResumoView
 import br.com.alura.financas.ui.adapter.ListaTransacoesAdapter
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
-import kotlinx.android.synthetic.main.resumo_card.*
 import java.math.BigDecimal
 import java.util.*
 
@@ -19,20 +19,16 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
         val transacoes: List<Transacao> = transacoesDeExemplo()
 
-        adicionaReceitaNoResumo(transacoes)
+        configuraResumo(transacoes)
 
         configuraLista(transacoes)
     }
 
-    private fun adicionaReceitaNoResumo(transacoes: List<Transacao>) {
-        var totalReceita = BigDecimal.ZERO
-        transacoes.forEach {
-            if (it.tipo == Tipo.RECEITA) {
-                totalReceita += it.valor
-            }
-        }
-        resumo_card_receita.text = totalReceita.formataParaBrasileiro()
+    private fun configuraResumo(transacoes: List<Transacao>) {
+        val view: View = window.decorView
+        ResumoView(view).adiciona(transacoes)
     }
+
 
     private fun configuraLista(transacoes: List<Transacao>) {
         lista_transacoes_listview.adapter = ListaTransacoesAdapter(transacoes, this)
