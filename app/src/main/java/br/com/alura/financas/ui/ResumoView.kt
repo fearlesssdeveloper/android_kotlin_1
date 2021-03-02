@@ -21,9 +21,9 @@ class ResumoView(private val context: Context, private val view: View, transacoe
     }
 
     private fun adiciona() {
-        val totalReceita = resumo.receita()
-        val totalDespesa = resumo.despesa()
-        val total: BigDecimal = resumo.total()
+        val totalReceita = resumo.receita
+        val totalDespesa = resumo.despesa
+        val total: BigDecimal = resumo.total
 
         with(view.resumo_card_receita) {
             setTextColor(corReceita)
