@@ -2,6 +2,7 @@ package br.com.alura.financas.ui.activity
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.financas.R
 import br.com.alura.financas.model.Tipo
@@ -22,6 +23,13 @@ class ListaTransacoesActivity : AppCompatActivity() {
         configuraResumo(transacoes)
 
         configuraLista(transacoes)
+
+        lista_transacoes_adiciona_receita.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(p0: View?) {
+                Toast.makeText(this@ListaTransacoesActivity, "clique de receita", Toast.LENGTH_LONG).show()
+            }
+
+        })
     }
 
     private fun configuraResumo(transacoes: List<Transacao>) {
