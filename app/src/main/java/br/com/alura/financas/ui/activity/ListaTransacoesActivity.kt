@@ -1,20 +1,22 @@
 package br.com.alura.financas.ui.activity
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.financas.R
+import br.com.alura.financas.extension.formataParaBrasileiro
 import br.com.alura.financas.model.Tipo
 import br.com.alura.financas.model.Transacao
 import br.com.alura.financas.ui.ResumoView
 import br.com.alura.financas.ui.adapter.ListaTransacoesAdapter
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
+import kotlinx.android.synthetic.main.form_transacao.view.*
 import java.math.BigDecimal
-import java.util.*
+import java.util.Calendar
 
 class ListaTransacoesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +33,22 @@ class ListaTransacoesActivity : AppCompatActivity() {
             val view: View = window.decorView
             val viewCriada = LayoutInflater.from(this).inflate(R.layout.form_transacao, view as ViewGroup, false)
 
+            val dataAtual = Calendar.getInstance()
+            val ano = dataAtual.get(Calendar.YEAR)
+            val mes = dataAtual.get(Calendar.MONTH)
+            val dia = dataAtual.get(Calendar.DAY_OF_MONTH)
+
+            val hoje = Calendar.getInstance().formataParaBrasileiro()
+            viewCriada.form_transacao_data.setText(hoje)
+            viewCriada.form_transacao_data.setOnClickListener {
+                DatePickerDialog(this,
+                        { view, ano, mes, dia ->
+                            val dataSelecionada = Calendar.getInstance()
+                            dataSelecionada.set(ano, mes, dia)
+                            viewCriada.form_transacao_data.setText(dataSelecionada.formataParaBrasileiro())
+                        }, ano, mes, dia)
+                        .show()
+            }
             AlertDialog.Builder(this)
                     .setTitle(R.string.adiciona_receita)
                     .setView(viewCriada)
