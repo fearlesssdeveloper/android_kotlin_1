@@ -16,7 +16,11 @@ class ResumoView(private val context: Context, private val view: View, transacoe
     private val corReceita = ContextCompat.getColor(context, R.color.receita)
     private val corDespesa = ContextCompat.getColor(context, R.color.despesa)
 
-    fun adiciona() {
+    fun atualiza(){
+        adiciona()
+    }
+
+    private fun adiciona() {
         val totalReceita = resumo.receita()
         val totalDespesa = resumo.despesa()
         val total: BigDecimal = resumo.total()
