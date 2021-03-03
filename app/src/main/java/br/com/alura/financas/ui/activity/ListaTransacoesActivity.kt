@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.financas.R
@@ -40,6 +41,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
             val hoje = Calendar.getInstance().formataParaBrasileiro()
             viewCriada.form_transacao_data.setText(hoje)
+
             viewCriada.form_transacao_data.setOnClickListener {
                 DatePickerDialog(this,
                         { view, ano, mes, dia ->
@@ -49,9 +51,18 @@ class ListaTransacoesActivity : AppCompatActivity() {
                         }, ano, mes, dia)
                         .show()
             }
+
+            val adapter = ArrayAdapter.createFromResource(this,
+                    R.array.categorias_de_receita,
+                    android.R.layout.simple_spinner_dropdown_item)
+
+            viewCriada.form_transacao_categoria.adapter = adapter
+
             AlertDialog.Builder(this)
                     .setTitle(R.string.adiciona_receita)
                     .setView(viewCriada)
+                    .setPositiveButton("Adicionar", null)
+                    .setNegativeButton("Cancelar", null)
                     .show()
         }
     }
