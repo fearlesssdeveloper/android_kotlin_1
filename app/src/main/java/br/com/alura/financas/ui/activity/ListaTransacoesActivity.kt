@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.financas.R
@@ -18,20 +17,20 @@ import br.com.alura.financas.ui.ResumoView
 import br.com.alura.financas.ui.adapter.ListaTransacoesAdapter
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
 import kotlinx.android.synthetic.main.form_transacao.view.*
-import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
 class ListaTransacoesActivity : AppCompatActivity() {
+
+    private val transacoes : MutableList<Transacao> = mutableListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_transacoes)
 
-        val transacoes: List<Transacao> = transacoesDeExemplo()
+        configuraResumo()
 
-        configuraResumo(transacoes)
-
-        configuraLista(transacoes)
+        configuraLista()
 
         lista_transacoes_adiciona_receita.setOnClickListener {
             val view: View = window.decorView
@@ -69,37 +68,32 @@ class ListaTransacoesActivity : AppCompatActivity() {
                         val dataEmTexto = viewCriada.form_transacao_data.text.toString()
                         val categoriaEmTexto = viewCriada.form_transacao_categoria.selectedItem.toString()
 
-//                        val valor = BigDecimal(valorEmTexto)
                         val formatoBrasileiro = SimpleDateFormat("dd/MM/yyyy")
                         val dataConvertida = formatoBrasileiro.parse(dataEmTexto)
                         val data = Calendar.getInstance()
                         data.time = dataConvertida
                         val transacaoCriada = Transacao(tipo = Tipo.RECEITA, valor = valorEmTexto.toBigDecimal(), data = data, categoria = categoriaEmTexto)
-                        Toast.makeText(this,
-                                        "${transacaoCriada.valor} - " +
-                                        "${transacaoCriada.categoria} - " +
-                                        "${transacaoCriada.data.formataParaBrasileiro()} - " +
-                                        "${transacaoCriada.tipo}", Toast.LENGTH_LONG).show()
+                        atualizaTransacoes(transacaoCriada)
+                        lista_transacoes_adiciona_menu.close(true)
                     })
                     .setNegativeButton("Cancelar", null)
                     .show()
         }
     }
 
-    private fun configuraResumo(transacoes: List<Transacao>) {
+    private fun atualizaTransacoes(transacao: Transacao) {
+        transacoes.add(transacao)
+        configuraLista()
+        configuraResumo()
+    }
+
+    private fun configuraResumo() {
         val view: View = window.decorView
         ResumoView(this, view, transacoes).atualiza()
     }
 
 
-    private fun configuraLista(transacoes: List<Transacao>) {
+    private fun configuraLista() {
         lista_transacoes_listview.adapter = ListaTransacoesAdapter(transacoes, this)
     }
-
-    private fun transacoesDeExemplo(): List<Transacao> = listOf(
-            Transacao(tipo = Tipo.DESPESA, categoria = "Almoço de final de semana", data = Calendar.getInstance(), valor = BigDecimal(100.0)),
-            Transacao(valor = BigDecimal(100.0), categoria = "Econômia", tipo = Tipo.RECEITA),
-            Transacao(valor = BigDecimal(100.0), tipo = Tipo.DESPESA),
-            Transacao(valor = BigDecimal(200.0), categoria = "Prêmio", tipo = Tipo.RECEITA)
-    )
 }
