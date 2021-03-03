@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.financas.R
@@ -17,6 +18,8 @@ import br.com.alura.financas.ui.ResumoView
 import br.com.alura.financas.ui.adapter.ListaTransacoesAdapter
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
 import kotlinx.android.synthetic.main.form_transacao.view.*
+import java.lang.NumberFormatException
+import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -68,11 +71,18 @@ class ListaTransacoesActivity : AppCompatActivity() {
                         val dataEmTexto = viewCriada.form_transacao_data.text.toString()
                         val categoriaEmTexto = viewCriada.form_transacao_categoria.selectedItem.toString()
 
+                        var valor = try {
+                            valorEmTexto.toBigDecimal()
+                        } catch (exception: NumberFormatException) {
+                            Toast.makeText(this, "Falha na conversão de valor", Toast.LENGTH_LONG).show()
+                            BigDecimal.ZERO
+                        }
+
                         val formatoBrasileiro = SimpleDateFormat("dd/MM/yyyy")
                         val dataConvertida = formatoBrasileiro.parse(dataEmTexto)
                         val data = Calendar.getInstance()
                         data.time = dataConvertida
-                        val transacaoCriada = Transacao(tipo = Tipo.RECEITA, valor = valorEmTexto.toBigDecimal(), data = data, categoria = categoriaEmTexto)
+                        val transacaoCriada = Transacao(tipo = Tipo.RECEITA, valor = valor, data = data, categoria = categoriaEmTexto)
                         atualizaTransacoes(transacaoCriada)
                         lista_transacoes_adiciona_menu.close(true)
                     })
