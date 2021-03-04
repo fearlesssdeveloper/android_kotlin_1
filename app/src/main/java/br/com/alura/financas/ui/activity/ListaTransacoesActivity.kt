@@ -36,58 +36,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
         configuraLista()
 
         lista_transacoes_adiciona_receita.setOnClickListener {
-            val view: View = window.decorView
-            val viewCriada = LayoutInflater.from(this).inflate(R.layout.form_transacao, view as ViewGroup, false)
-
-            val dataAtual = Calendar.getInstance()
-            val ano = dataAtual.get(Calendar.YEAR)
-            val mes = dataAtual.get(Calendar.MONTH)
-            val dia = dataAtual.get(Calendar.DAY_OF_MONTH)
-
-            val hoje = Calendar.getInstance().formataParaBrasileiro()
-            viewCriada.form_transacao_data.setText(hoje)
-
-            viewCriada.form_transacao_data.setOnClickListener {
-                DatePickerDialog(this,
-                        { view, ano, mes, dia ->
-                            val dataSelecionada = Calendar.getInstance()
-                            dataSelecionada.set(ano, mes, dia)
-                            viewCriada.form_transacao_data.setText(dataSelecionada.formataParaBrasileiro())
-                        }, ano, mes, dia)
-                        .show()
-            }
-
-            val adapter = ArrayAdapter.createFromResource(this,
-                    R.array.categorias_de_receita,
-                    android.R.layout.simple_spinner_dropdown_item)
-
-            viewCriada.form_transacao_categoria.adapter = adapter
-
-            AlertDialog.Builder(this)
-                    .setTitle(R.string.adiciona_receita)
-                    .setView(viewCriada)
-                    .setPositiveButton("Adicionar", DialogInterface.OnClickListener { dialogInterface, i ->
-                        val valorEmTexto = viewCriada.form_transacao_valor.text.toString()
-                        val dataEmTexto = viewCriada.form_transacao_data.text.toString()
-                        val categoriaEmTexto = viewCriada.form_transacao_categoria.selectedItem.toString()
-
-                        var valor = try {
-                            valorEmTexto.toBigDecimal()
-                        } catch (exception: NumberFormatException) {
-                            Toast.makeText(this, "Falha na conversão de valor", Toast.LENGTH_LONG).show()
-                            BigDecimal.ZERO
-                        }
-
-                        val formatoBrasileiro = SimpleDateFormat("dd/MM/yyyy")
-                        val dataConvertida = formatoBrasileiro.parse(dataEmTexto)
-                        val data = Calendar.getInstance()
-                        data.time = dataConvertida
-                        val transacaoCriada = Transacao(tipo = Tipo.RECEITA, valor = valor, data = data, categoria = categoriaEmTexto)
-                        atualizaTransacoes(transacaoCriada)
-                        lista_transacoes_adiciona_menu.close(true)
-                    })
-                    .setNegativeButton("Cancelar", null)
-                    .show()
+            configuraDialog()
         }
     }
 
