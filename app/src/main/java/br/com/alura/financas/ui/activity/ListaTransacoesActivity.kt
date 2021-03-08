@@ -16,11 +16,13 @@ import kotlinx.android.synthetic.main.activity_lista_transacoes.*
 class ListaTransacoesActivity : AppCompatActivity() {
 
     private val transacoes : MutableList<Transacao> = mutableListOf()
-    private val viewDaActivity = window.decorView
+    private var viewDaActivity: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_transacoes)
+
+        viewDaActivity = window.decorView
 
         configuraResumo()
         configuraLista()
@@ -42,6 +44,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
                 override fun delegate(transacao: Transacao) {
                     adiciona(transacao)
                     lista_transacoes_adiciona_menu.close(true)
+
                 }
             })
     }
@@ -57,8 +60,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
     }
 
     private fun configuraResumo() {
-        val view: View = viewDaActivity
-        ResumoView(this, view, transacoes).atualiza()
+        ResumoView(this, viewDaActivity, transacoes).atualiza()
     }
 
 
