@@ -27,15 +27,16 @@ class AlteraTransacaoDialog(private val viewGroup: ViewGroup, private val contex
 
     fun chama(transacao: Transacao, transacaoDelegate: TransacaoDelegate) {
         val tipo = transacao.tipo
+
+        configuraCampoData()
+        configuraCampoCategoria(tipo)
+        configuraFormulario(tipo, transacaoDelegate)
+
         campoValor.setText(transacao.valor.toString())
         campoData.setText(transacao.data.formataParaBrasileiro())
         val categoriasRetornadas = context.resources.getStringArray(categoriaPor(tipo))
         val posicaoCategoria = categoriasRetornadas.indexOf(transacao.categoria)
         campoCategoria.setSelection(posicaoCategoria, true)
-
-        configuraCampoData()
-        configuraCampoCategoria(tipo)
-        configuraFormulario(tipo, transacaoDelegate)
     }
 
 
@@ -46,7 +47,7 @@ class AlteraTransacaoDialog(private val viewGroup: ViewGroup, private val contex
         AlertDialog.Builder(context)
             .setTitle(titulo)
             .setView(viewCriada)
-            .setPositiveButton("Adicionar") { _, _ ->
+            .setPositiveButton("Alterar") { _, _ ->
                 val valorEmTexto = campoValor.text.toString()
                 val dataEmTexto = campoData.text.toString()
                 val categoriaEmTexto = campoCategoria.selectedItem.toString()
@@ -67,9 +68,9 @@ class AlteraTransacaoDialog(private val viewGroup: ViewGroup, private val contex
     }
 
     private fun tituloPor(tipo: Tipo) = if (tipo == Tipo.RECEITA) {
-        R.string.adiciona_receita
+        R.string.altera_receita
     } else {
-        R.string.adiciona_despesa
+        R.string.altera_despesa
     }
 
     private fun converteCampoValor(valorEmTexto: String) = try {
@@ -115,8 +116,7 @@ class AlteraTransacaoDialog(private val viewGroup: ViewGroup, private val contex
                     dataSelecionada.set(ano, mes, dia)
                     campoData.setText(dataSelecionada.formataParaBrasileiro())
                 }, ano, mes, dia
-            )
-                .show()
+            ).show()
         }
     }
 
