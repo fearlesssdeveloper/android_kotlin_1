@@ -28,7 +28,7 @@ class AlteraTransacaoDialog(private val viewGroup: ViewGroup, private val contex
     fun chama(transacao: Transacao, transacaoDelegate: TransacaoDelegate) {
         val tipo = transacao.tipo
 
-        configuraCampoData()
+        configuraCampoData(transacao)
         configuraCampoCategoria(tipo)
         configuraFormulario(tipo, transacaoDelegate)
 
@@ -99,14 +99,12 @@ class AlteraTransacaoDialog(private val viewGroup: ViewGroup, private val contex
         R.array.categorias_de_despesa
     }
 
-    private fun configuraCampoData() {
-        val hoje = Calendar.getInstance()
+    private fun configuraCampoData(transacao: Transacao) {
+        val hoje = transacao.data
 
-        val ano = hoje.get(Calendar.YEAR)
-        val mes = hoje.get(Calendar.MONTH)
-        val dia = hoje.get(Calendar.DAY_OF_MONTH)
-
-        campoData.setText(hoje.formataParaBrasileiro())
+        var anoAtual = hoje.get(Calendar.YEAR)
+        var mesAtual = hoje.get(Calendar.MONTH)
+        var diaAtual = hoje.get(Calendar.DAY_OF_MONTH)
 
         campoData.setOnClickListener {
             DatePickerDialog(
@@ -114,8 +112,11 @@ class AlteraTransacaoDialog(private val viewGroup: ViewGroup, private val contex
                 { _, ano, mes, dia ->
                     val dataSelecionada = Calendar.getInstance()
                     dataSelecionada.set(ano, mes, dia)
+                    anoAtual = ano
+                    mesAtual = mes
+                    diaAtual = dia
                     campoData.setText(dataSelecionada.formataParaBrasileiro())
-                }, ano, mes, dia
+                }, anoAtual, mesAtual, diaAtual
             ).show()
         }
     }

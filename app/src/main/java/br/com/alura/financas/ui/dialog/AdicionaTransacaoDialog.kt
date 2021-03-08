@@ -94,9 +94,9 @@ class AdicionaTransacaoDialog(private val viewGroup: ViewGroup, private val cont
     private fun configuraCampoData() {
         val hoje = Calendar.getInstance()
 
-        val ano = hoje.get(Calendar.YEAR)
-        val mes = hoje.get(Calendar.MONTH)
-        val dia = hoje.get(Calendar.DAY_OF_MONTH)
+        var anoAtual = hoje.get(Calendar.YEAR)
+        var mesAtual = hoje.get(Calendar.MONTH)
+        var diaAtual = hoje.get(Calendar.DAY_OF_MONTH)
 
         campoData.setText(hoje.formataParaBrasileiro())
 
@@ -106,8 +106,11 @@ class AdicionaTransacaoDialog(private val viewGroup: ViewGroup, private val cont
                 { _, ano, mes, dia ->
                     val dataSelecionada = Calendar.getInstance()
                     dataSelecionada.set(ano, mes, dia)
+                    anoAtual = ano
+                    mesAtual = mes
+                    diaAtual = dia
                     campoData.setText(dataSelecionada.formataParaBrasileiro())
-                }, ano, mes, dia
+                }, anoAtual, mesAtual, diaAtual
             )
                 .show()
         }
