@@ -25,20 +25,22 @@ class ResumoView(context: Context, private val view: View?, transacoes: List<Tra
         val totalDespesa = resumo.despesa
         val total: BigDecimal = resumo.total
 
-        with(view!!.resumo_card_receita) {
-            setTextColor(corReceita)
-            text = totalReceita.formataParaBrasileiro()
-        }
+        view?.let {
+            with(it.resumo_card_receita) {
+                setTextColor(corReceita)
+                text = totalReceita.formataParaBrasileiro()
+            }
 
-        with(view!!.resumo_card_despesa) {
-            setTextColor(corDespesa)
-            text = totalDespesa.formataParaBrasileiro()
-        }
+            with(it.resumo_card_despesa) {
+                setTextColor(corDespesa)
+                text = totalDespesa.formataParaBrasileiro()
+            }
 
-        with(view!!.resumo_card_total) {
-            val cor = corPor(total)
-            setTextColor(cor)
-            text = total.formataParaBrasileiro()
+            with(it.resumo_card_total) {
+                val cor = corPor(total)
+                setTextColor(cor)
+                text = total.formataParaBrasileiro()
+            }
         }
     }
 
