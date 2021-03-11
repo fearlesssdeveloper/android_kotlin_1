@@ -1,7 +1,7 @@
 package br.com.alura.financas.ui.activity
+
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.financas.R
@@ -13,10 +13,11 @@ import br.com.alura.financas.ui.adapter.ListaTransacoesAdapter
 import br.com.alura.financas.ui.dialog.AdicionaTransacaoDialog
 import br.com.alura.financas.ui.dialog.AlteraTransacaoDialog
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
+import java.math.BigDecimal
 
 class ListaTransacoesActivity : AppCompatActivity() {
 
-    private val transacoes : MutableList<Transacao> = mutableListOf()
+    private val transacoes: MutableList<Transacao> = mutableListOf()
     private val viewDaActivity by lazy {
         window.decorView
     }
@@ -32,6 +33,11 @@ class ListaTransacoesActivity : AppCompatActivity() {
         configuraResumo()
         configuraLista()
         configuraFab()
+
+        testaFuncaoDoKotlin { transacao ->
+            Log.i("hof", "entrei na expressao lambda")
+            Log.i("hof", "transação recebida da hof ${transacao.valor} - ${transacao.tipo}")
+        }
     }
 
     private fun configuraFab() {
@@ -49,9 +55,15 @@ class ListaTransacoesActivity : AppCompatActivity() {
                 override fun delegate(transacao: Transacao) {
                     adiciona(transacao)
                     lista_transacoes_adiciona_menu.close(true)
-
                 }
+
             })
+    }
+
+    fun testaFuncaoDoKotlin(transacaoDelegate: (transacao: Transacao) -> Unit) {
+        Log.i("hof", "testaFuncaoDoKotlin esta sendo executada")
+        val transacao = Transacao(valor = BigDecimal(100), tipo = Tipo.RECEITA)
+        transacaoDelegate(transacao)
     }
 
     private fun adiciona(transacao: Transacao) {
