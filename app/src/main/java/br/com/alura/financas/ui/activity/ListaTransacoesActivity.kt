@@ -5,9 +5,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.financas.R
+import br.com.alura.financas.dao.TransacaoDAO
 import br.com.alura.financas.model.Tipo
 import br.com.alura.financas.model.Transacao
 import br.com.alura.financas.ui.ResumoView
@@ -15,10 +15,12 @@ import br.com.alura.financas.ui.adapter.ListaTransacoesAdapter
 import br.com.alura.financas.ui.dialog.AdicionaTransacaoDialog
 import br.com.alura.financas.ui.dialog.AlteraTransacaoDialog
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
+import java.math.BigDecimal
 
 class ListaTransacoesActivity : AppCompatActivity() {
 
-    private val transacoes: MutableList<Transacao> = mutableListOf()
+    private val dao = TransacaoDAO()
+    private val transacoes: List<Transacao> = dao.transacoes
     private val viewDaActivity by lazy {
         window.decorView
     }
@@ -54,7 +56,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
     }
 
     private fun adiciona(transacao: Transacao) {
-        transacoes.add(transacao)
+        dao.adiciona(transacao)
         atualizaTransacoes()
     }
 
@@ -84,7 +86,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         val idDoMenu = item.itemId
-        if (idDoMenu == 1)  {
+        if (idDoMenu == 1) {
             val adapterMenuInfo = item.menuInfo as AdapterView.AdapterContextMenuInfo
             val posicaoDaTransacao = adapterMenuInfo.position
             remove(posicaoDaTransacao)
@@ -93,7 +95,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
     }
 
     private fun remove(posicao: Int) {
-        transacoes.removeAt(posicao)
+        dao.remove(posicao)
         atualizaTransacoes()
     }
 
@@ -105,7 +107,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
     }
 
     private fun altera(transacao: Transacao, posicao: Int) {
-        transacoes[posicao] = transacao
+       dao.altera(transacao, posicao)
         atualizaTransacoes()
     }
 }
